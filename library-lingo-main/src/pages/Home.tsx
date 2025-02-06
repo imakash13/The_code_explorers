@@ -1,9 +1,9 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Book, Users, Clock, BookOpen, Search, CircleUser, Shield, User, Route } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
-const Header = () => {
+const Home = () => {
   const navigate = useNavigate();
   const stats = [
     { title: "Total Books", value: "12,485", icon: Book, color: "text-blue-600" },
@@ -35,10 +35,9 @@ const Header = () => {
             <User className="h-5 w-5" />
             User Login
           </button>
-          <Link to="/users">login</Link>
           <button 
             className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
-            onClick={() => console.log('Admin login clicked')}
+            onClick={() => navigate("/admin")}
           >
             <Shield className="h-5 w-5" />
             Admin Login
@@ -143,4 +142,4 @@ const Header = () => {
   );
 };
 
-export default Header;
+export default Home;

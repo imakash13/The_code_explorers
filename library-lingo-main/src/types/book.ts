@@ -1,14 +1,17 @@
 
 export interface Book {
+  count: any;
   id: string;
   title: string;
   author: string;
   coverUrl: string;
-  description: string;
-  genre: string;
   rating: number;
   publishedDate: string;
   available: boolean;
+  genre?: string;
+  isbn?: string;
+  coverImage?: string;
+  description?: string;
 }
 
 export interface Review {
