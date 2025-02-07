@@ -1,17 +1,10 @@
-import { useEffect, useState } from "react";
-import { Menu, Search, User } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { books } from "@/lib/mock-data";
-import { BookGrid } from "@/components/BookGrid";
-import { SearchBar } from "@/components/SearchBar";
-import { Link } from "react-router-dom";
-import { Book } from "@/types/book";
-import axios from "axios";
+import React from 'react'
 
 const Users = () => {
-    const [searchQuery, setSearchQuery] = useState("");
-    const [books, setBooks] = useState<Book[]>([]);
+  return (
+    <div>Users</div>
+  )
+}
 
     const API_URL = "https://library-55df1-default-rtdb.firebaseio.com";
     useEffect(() => {
@@ -99,5 +92,3 @@ const Users = () => {
         </div>
     );
 };
-
-export default Users;

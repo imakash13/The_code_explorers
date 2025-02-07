@@ -12,7 +12,11 @@ import Users from "./pages/Users";
 import Home from "./pages/Home";
 import Books from "./pages/Books";
 
-const queryClient = new QueryClient();
+const App = () => {
+  return (
+    <div>App</div>
+  )
+}
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
