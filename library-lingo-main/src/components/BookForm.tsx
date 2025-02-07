@@ -21,7 +21,6 @@ export const BookForm = ({ book, onSubmit, onCancel }: BookFormProps) => {
     coverImage: book?.coverImage || "",
     description: book?.description || "",
     available: book?.count && book.count > 0,
-    coverUrl: book?.coverUrl || "",
     publishedDate: book?.publishedDate || "",
     rating: book?.rating ?? 0,
     count: book?.count || 0
@@ -90,14 +89,6 @@ export const BookForm = ({ book, onSubmit, onCancel }: BookFormProps) => {
           id="description"
           value={formData.description}
           onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-        />
-      </div>
-      <div>
-        <Label htmlFor="coverUrl">Cover URL</Label>
-        <Input
-          id="coverUrl"
-          value={formData.coverUrl}
-          onChange={(e) => setFormData({ ...formData, coverUrl: e.target.value })}
         />
       </div>
       <div>

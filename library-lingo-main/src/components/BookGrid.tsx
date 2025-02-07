@@ -14,7 +14,7 @@ export const BookGrid = ({ books }: BookGridProps) => {
         <Card key={book.id} className="overflow-hidden hover:shadow-lg transition-shadow">
           <div className="aspect-[3/4] relative">
             <img
-              src={book.coverUrl}
+              src={book.coverImage}
               alt={book.title}
               className="object-cover w-full h-full"
             />

@@ -27,14 +27,14 @@ export const BookCard = ({ book, onEdit, onDelete, isAdmin = false }: BookCardPr
       {isAdmin && (
         <CardFooter className="flex justify-between gap-2">
           <Button
-            variant="outline"
+            variant="ghost"
             className="flex-1"
             onClick={() => onEdit?.(book)}
           >
             Edit
           </Button>
           <Button
-            variant="destructive"
+            variant="ghost"
             className="flex-1"
             onClick={() => onDelete?.(book)}
           >

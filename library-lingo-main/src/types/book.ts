@@ -4,7 +4,6 @@ export interface Book {
   id: string;
   title: string;
   author: string;
-  coverUrl: string;
   rating: number;
   publishedDate: string;
   available: boolean;
