@@ -57,22 +57,19 @@ const Users = () => {
                             </SheetTrigger>
                             <SheetContent side="left">
                                 <nav className="flex flex-col gap-4">
-                                    <Link to="/" className="text-lg font-medium">Home</Link>
                                     <Link to="/books" className="text-lg font-medium">Books</Link>
                                     <Link to="/users" className="text-lg font-medium">Profile</Link>
                                 </nav>
                             </SheetContent>
                         </Sheet>
 
-                        <Link to="/" className="font-bold text-xl">LibraryOS</Link>
-
                         <nav className="hidden md:flex items-center gap-6">
                             <Link to="/books" className="text-sm font-medium hover:text-primary/80 transition-colors">Books</Link>
                             <Link to="/profile" className="text-sm font-medium hover:text-primary/80 transition-colors">Profile</Link>
                         </nav>
                     </div>
-{/* 
-                    <div className="flex items-center gap-4">
+
+                    {/* <div className="flex items-center gap-4">
                         <Button variant="ghost" size="icon">
                             <Search className="w-5 h-5" />
                         </Button>

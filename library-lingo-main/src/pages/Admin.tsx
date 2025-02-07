@@ -30,7 +30,7 @@ const Admin = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(`${API_URL}/books.json`);
-        const data = response.data || {}; // Ensure it’s an object
+        const data = response.data || {};
         const booksArray = Object.entries(data).map(([id, book]) => ({
           id,
           ...(book as Book),
