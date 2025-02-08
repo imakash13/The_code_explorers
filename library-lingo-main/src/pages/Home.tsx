@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Book, Users, Clock, BookOpen, Search, CircleUser, Shield, User, Route } from 'lucide-react';
+import { Book, Users, Clock, BookOpen, Search, CircleUser, Shield, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -29,18 +29,11 @@ const Home = () => {
         </div>
         <div className="flex gap-4">
           <button 
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            onClick={() => navigate("/users")}
-          >
-            <User className="h-5 w-5" />
-            User Login
-          </button>
-          <button 
             className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
-            onClick={() => navigate("/admin")}
+            onClick={() => navigate("/login")} // Navigate to Login page
           >
             <Shield className="h-5 w-5" />
-            Admin Login
+            Login
           </button>
         </div>
       </div>
