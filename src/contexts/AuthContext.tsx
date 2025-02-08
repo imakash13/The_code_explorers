@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
   onAuthStateChanged,
-  User
+  User,
+  UserCredential
 } from "firebase/auth";
 import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useToast } from "@/components/ui/use-toast";
@@ -16,7 +17,7 @@ interface AuthContextType {
   loading: boolean;
   isOnline: boolean;
   signup: (email: string, password: string, role: string) => Promise<void>;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<UserCredential>;
   logout: () => Promise<void>;
 }
 
@@ -119,13 +120,18 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       throw new Error("Cannot log in while offline");
     }
-
+  
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      // ✅ Capture the userCredential after successful login
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const loggedInUser = userCredential.user; // ✅ Correctly extracting user
+  
       toast({
         title: "Logged in successfully",
         description: "Welcome back!",
       });
+  
+      return userCredential; // ✅ Return userCredential for further use
     } catch (error: unknown) {
       toast({
         variant: "destructive",
@@ -135,7 +141,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       throw error;
     }
   };
-
+  
   const logout = async () => {
     if (!isOnline) {
       toast({

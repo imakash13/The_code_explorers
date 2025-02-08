@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +9,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Link } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import { getAuth, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
+
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -32,19 +35,38 @@ const Login = () => {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    if (loading) return; // Prevent multiple submissions
-    
+    if (loading) return;
+  
     try {
       setLoading(true);
-      await login(values.email, values.password);
-      navigate("/dashboard");
+      const userCredential = await login(values.email, values.password); // ✅ Ensure login returns userCredential
+      const loggedInUser = userCredential.user; // ✅ Should now work
+  
+      if (loggedInUser?.uid) {
+        const userDocRef = doc(db, "users", loggedInUser.uid);
+        const userDocSnap = await getDoc(userDocRef);
+  
+        if (userDocSnap.exists()) {
+          const userRole = userDocSnap.data().role;
+  
+          if (userRole === "Admin") {
+            navigate("/Admin");
+          } else {
+            navigate("/Users");
+          }
+        } else {
+          console.error("User role not found in Firestore");
+        }
+      } else {
+        console.error("User not logged in");
+      }
     } catch (error) {
       console.error("Login error:", error);
     } finally {
       setLoading(false);
     }
   };
-
+  
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-md">
