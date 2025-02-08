@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -9,10 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { Link } from "react-router-dom";
-import { doc, getDoc } from "firebase/firestore";
-import { db } from "@/lib/firebase";
-import { getAuth, signInWithEmailAndPassword, UserCredential } from "firebase/auth";
-
+import { useToast } from "@/components/ui/use-toast";
 
 const loginSchema = z.object({
   email: z.string().email("Please enter a valid email address"),
@@ -25,6 +23,7 @@ const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
@@ -35,38 +34,40 @@ const Login = () => {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    if (loading) return;
-  
+    if (loading) return; // Prevent multiple submissions
+    
     try {
       setLoading(true);
-      const userCredential = await login(values.email, values.password); // ✅ Ensure login returns userCredential
-      const loggedInUser = userCredential.user; // ✅ Should now work
-  
-      if (loggedInUser?.uid) {
-        const userDocRef = doc(db, "users", loggedInUser.uid);
-        const userDocSnap = await getDoc(userDocRef);
-  
-        if (userDocSnap.exists()) {
-          const userRole = userDocSnap.data().role;
-  
-          if (userRole === "Admin") {
-            navigate("/Admin");
-          } else {
-            navigate("/Users");
-          }
-        } else {
-          console.error("User role not found in Firestore");
-        }
-      } else {
-        console.error("User not logged in");
-      }
-    } catch (error) {
+      await login(values.email, values.password);
+      toast({
+        title: "Success",
+        description: "Successfully logged in!",
+      });
+      navigate("/dashboard");
+    } catch (error: unknown) {
       console.error("Login error:", error);
+      let errorMessage = "Failed to login. Please try again.";
+      
+      if ((error as { code: string }).code === "auth/invalid-credential" || (error as { code: string }).code === "auth/invalid-login-credentials") {
+        errorMessage = "Invalid email or password. Please check your credentials and try again.";
+      } else if ((error as { code: string }).code === "auth/user-not-found") {
+        errorMessage = "No account found with this email. Please sign up first.";
+      } else if ((error as { code: string }).code === "auth/too-many-requests") {
+        errorMessage = "Too many failed login attempts. Please try again later.";
+      } else if ((error as { code: string }).code === "auth/network-request-failed") {
+        errorMessage = "Network error. Please check your internet connection.";
+      }
+
+      toast({
+        variant: "destructive",
+        title: "Error",
+        description: errorMessage,
+      });
     } finally {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
       <Card className="w-full max-w-md">
