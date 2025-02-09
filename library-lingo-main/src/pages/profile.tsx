@@ -6,13 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { getAuth, onAuthStateChanged, User } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-
-interface Book {
-  id: number;
-  title: string;
-  author: string;
-  image: string;
-}
+import { Book } from "@/types/book";
 
 const Profile = () => {
   const auth = getAuth();
@@ -23,33 +17,7 @@ const Profile = () => {
   const [mobile, setMobile] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(true);
-
-  const [issuedBooks, setIssuedBooks] = useState<Book[]>([
-    {
-      id: 1,
-      title: "The Great Gatsby",
-      author: "F. Scott Fitzgerald",
-      image: "https://tse3.mm.bing.net/th?id=OIP.OIOAhyVyhfuNoK5ev3p9DAHaLG&pid=Api&P=0&h=180"
-    },
-    {
-      id: 2,
-      title: "1984",
-      author: "George Orwell",
-      image: "https://tse4.mm.bing.net/th?id=OIP.uUtNeR0CUK2RIvzheFw6ZAHaJz&pid=Api&P=0&h=180"
-    },
-    {
-      id: 3,
-      title: "To Kill a Mockingbird",
-      author: "Harper Lee",
-      image: "https://tse3.mm.bing.net/th?id=OIP.6-6fkF8k2jwWGFc8B69XnAHaLH&pid=Api&P=0&h=180"
-    },
-    {
-      id: 4,
-      title: "Pride and Prejudice",
-      author: "Jane Austen",
-      image: "https://tse2.mm.bing.net/th?id=OIP.JPow5QVYTIRnaf8pqZ5MCgHaI7&pid=Api&P=0&h=180"
-    }
-  ]);
+  const [issuedBooks, setIssuedBooks] = useState<Book[]>([]);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -62,6 +30,15 @@ const Profile = () => {
       setLoading(false);
     });
 
+    // Load issued books from localStorage
+    const loadIssuedBooks = () => {
+      const books = localStorage.getItem('issuedBooks');
+      if (books) {
+        setIssuedBooks(JSON.parse(books));
+      }
+    };
+
+    loadIssuedBooks();
     return () => unsubscribe();
   }, [auth, navigate]);
 
@@ -73,8 +50,10 @@ const Profile = () => {
     });
   };
 
-  const returnBook = (id: number) => {
-    setIssuedBooks((prevBooks) => prevBooks.filter((book) => book.id !== id));
+  const returnBook = (id: string) => {
+    const updatedBooks = issuedBooks.filter((book) => book.id !== id);
+    setIssuedBooks(updatedBooks);
+    localStorage.setItem('issuedBooks', JSON.stringify(updatedBooks));
 
     toast({
       title: "Book Returned",
@@ -152,7 +131,7 @@ const Profile = () => {
                     className="flex space-x-4 p-4 border rounded-lg hover:bg-accent transition-colors"
                   >
                     <img
-                      src={book.image}
+                      src={book.coverImage}
                       alt={book.title}
                       className="w-20 h-28 object-cover rounded"
                     />
