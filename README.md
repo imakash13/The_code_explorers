@@ -7,7 +7,7 @@ A modern library management system built with React and Firebase offers a seamle
 Frontend with Firebase Integration
 
 ## Deployed App
-https://lovable.dev/projects/b25e1305-3894-41be-9151-3394c589c508
+https://library-explorers.netlify.app/
 
 ## Features
 - 📚 Browse extensive book collection with search and filter capabilities
