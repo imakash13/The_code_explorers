@@ -68,3 +68,21 @@
     background: darkred;
   }
   
+  .hide-Save-button {
+    display: none;
+  }
+
+  .hide-Edit-button {
+    display: none;
+  }
+
+  .buttonp {
+    margin-top: 10px;
+    padding: 5px 10px;
+    background: rgb(16, 16, 16);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    
+  }
