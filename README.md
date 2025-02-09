@@ -1,7 +1,7 @@
 # Library Management System
 
 ## Introduction
-A modern library management system built with React and Firebase, offering a seamless experience for users to browse books, manage their profile, and handle book borrowing/returns. The system features a clean UI with dark mode support and responsive design.
+A modern library management system built with React and Firebase offers a seamless experience for users to browse books, manage their profiles, and handle book borrowing/returns. The system features a clean UI with dark mode support and responsive design.
 
 ## Project Type
 Frontend with Firebase Integration
@@ -29,7 +29,7 @@ https://lovable.dev/projects/b25e1305-3894-41be-9151-3394c589c508
 ## Installation & Getting Started
 1. Clone the repository
 ```bash
-git clone <repository-url>
+git clone [<repository-url>](https://github.com/imakash13/The_code_explorers.git)
 cd library-management
 ```
 
