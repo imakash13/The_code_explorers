@@ -141,7 +141,7 @@ const Profile: React.FC = () => {
           <div key={book.id} className="book-card">
             <img src={book.image} alt={book.title} className="book-image" />
             <div className="book-details">
-              <p><strong>{book.title}</strong> by {book.author}</p>
+              <p><strong>{book.title}</strong> <br/> by {book.author}</p>
               <button onClick={() => returnBook(book.id)} className="return-button">Return</button>
             </div>
           </div>
