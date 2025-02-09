@@ -21,7 +21,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, userRole } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -39,22 +39,35 @@ const Login = () => {
     try {
       setLoading(true);
       await login(values.email, values.password);
-      toast({
-        title: "Success",
-        description: "Successfully logged in!",
-      });
-      navigate("/dashboard");
+      
+      // Wait for a brief moment to ensure userRole is updated
+      setTimeout(() => {
+        toast({
+          title: "Success",
+          description: "Successfully logged in!",
+        });
+        
+        // Redirect based on user role
+        if (userRole === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/dashboard");
+        }
+      }, 500);
+      
     } catch (error: unknown) {
       console.error("Login error:", error);
       let errorMessage = "Failed to login. Please try again.";
+
+      const errorCode = (error as { code?: string }).code;
       
-      if ((error as { code: string }).code === "auth/invalid-credential" || (error as { code: string }).code === "auth/invalid-login-credentials") {
+      if (errorCode === "auth/invalid-credential" || errorCode === "auth/invalid-login-credentials") {
         errorMessage = "Invalid email or password. Please check your credentials and try again.";
-      } else if ((error as { code: string }).code === "auth/user-not-found") {
+      } else if (errorCode === "auth/user-not-found") {
         errorMessage = "No account found with this email. Please sign up first.";
-      } else if ((error as { code: string }).code === "auth/too-many-requests") {
+      } else if (errorCode === "auth/too-many-requests") {
         errorMessage = "Too many failed login attempts. Please try again later.";
-      } else if ((error as { code: string }).code === "auth/network-request-failed") {
+      } else if (errorCode === "auth/network-request-failed") {
         errorMessage = "Network error. Please check your internet connection.";
       }
 

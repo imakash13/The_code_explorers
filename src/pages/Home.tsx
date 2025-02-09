@@ -33,7 +33,14 @@ const Home = () => {
             onClick={() => navigate("/login")} // Navigate to Login page
           >
             <Shield className="h-5 w-5" />
-            Login
+            UserLogin
+          </button>
+          <button 
+            className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
+            onClick={() => navigate("/Admin")} // Navigate to Admin  page
+          >
+            <Shield className="h-5 w-5" />
+            AdminLogin
           </button>
         </div>
       </div>
