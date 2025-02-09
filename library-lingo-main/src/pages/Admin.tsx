@@ -1,4 +1,13 @@
-import React from 'react'
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { BookCard } from "@/components/BookCard";
+import { BookForm } from "@/components/BookForm";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Book } from "@/types/book";
+import { useToast } from "@/components/ui/use-toast";
+import { useNavigate } from "react-router-dom";
 
 const Admin = () => {
   const [books, setBooks] = useState<Book[]>([]);
@@ -137,3 +146,64 @@ const Admin = () => {
       book?.author?.toLowerCase()?.includes(search) ||
       book?.genre.toLowerCase().includes(search)
   );
+  
+
+  return (
+    <div className="container py-8">
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-4xl font-serif font-bold text-primary">Library Admin</h1>
+        <Button onClick={() => setIsDialogOpen(true)}>Add New Book</Button>
+      </div>
+
+      <Input
+        type="search"
+        placeholder="Search books..."
+        className="max-w-md mb-8"
+        value={searchQuery}
+        onChange={(e) => setSearchQuery(e.target.value)}
+      />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {filteredBooks.map((book) => (
+          <div key={book.id}>
+            <BookCard
+              book={book}
+              isAdmin
+              onEdit={() => {
+                setSelectedBook(book);
+                setIsDialogOpen(true);
+              }}
+              onDelete={handleDeleteBook}
+            />
+            <div className="flex justify-between items-center mt-4">
+              <div className="flex items-center">
+                <Button onClick={() => handleDecreaseCount(book)}>-</Button>
+                <span className="mx-2">{book.count}</span>
+                <Button onClick={() => handleIncreaseCount(book)}>+</Button>
+              </div>
+              <p>Quantity: {book.count}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{selectedBook ? "Edit Book" : "Add New Book"}</DialogTitle>
+          </DialogHeader>
+          <BookForm
+            book={selectedBook}
+            onSubmit={selectedBook ? handleEditBook : handleAddBook}
+            onCancel={() => {
+              setIsDialogOpen(false);
+              setSelectedBook(undefined);
+            }}
+          />
+        </DialogContent>
+      </Dialog>
+    </div>
+  );
+};
+
+export default Admin;
