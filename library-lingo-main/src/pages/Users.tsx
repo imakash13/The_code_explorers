@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Menu, Search, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { books as mockBooks } from "@/lib/mock-data";
+import { books } from "@/lib/mock-data";
 import { BookGrid } from "@/components/BookGrid";
 import { SearchBar } from "@/components/SearchBar";
 import { Link } from "react-router-dom";
@@ -11,36 +11,37 @@ import axios from "axios";
 
 const Users = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [bookList, setBookList] = useState<Book[]>([]);
+    const [books, setBooks] = useState<Book[]>([]);
 
     const API_URL = "https://library-55df1-default-rtdb.firebaseio.com";
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(`${API_URL}/books.json`);
-                const data = response.data || {};
-                const booksArray = Object.entries(data).map(([id, book]) => ({
-                    id,
-                    ...(book as Book),
-                })).filter(book => book.title && book.author);
-                setBookList(booksArray);
-                console.log(booksArray);
-            } catch (error) {
-                console.error("Error fetching data from Realtime Database: ", error);
-            }
-        };
-
-        fetchData();
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`${API_URL}/books.json`);
+          const data = response.data || {};
+          const booksArray = Object.entries(data).map(([id, book]) => ({
+            id,
+            ...(book as Book),
+          })).filter(book => book.title && book.author);
+          setBooks(booksArray);
+          console.log(booksArray);
+        } catch (error) {
+          console.error("Error fetching data from Realtime Database: ", error);
+        }
+      };
+      
+  
+      fetchData();
     }, []); // Only runs on mount
-
+  
     const search = searchQuery?.toLowerCase() || "";
-    const filteredBooks = bookList.filter(
-        (book) =>
-            (book.available === true) &&
-            (book?.title?.toLowerCase()?.includes(search) ||
-                book?.author?.toLowerCase()?.includes(search) ||
-                book?.genre.toLowerCase().includes(search))
-    );
+    const filteredBooks = books.filter(
+      (book) =>
+        (book.available===true) &&
+        (book?.title?.toLowerCase()?.includes(search) ||
+        book?.author?.toLowerCase()?.includes(search) ||
+        book?.genre.toLowerCase().includes(search))
+    );  
 
     return (
         <div className="min-h-screen bg-background">
@@ -67,7 +68,7 @@ const Users = () => {
                             <Link to="/profile" className="text-sm font-medium hover:text-primary/80 transition-colors">Profile</Link>
                         </nav>
                     </div>
-                    
+
                     {/* <div className="flex items-center gap-4">
                         <Button variant="ghost" size="icon">
                             <Search className="w-5 h-5" />
