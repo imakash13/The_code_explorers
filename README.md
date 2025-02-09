@@ -29,8 +29,8 @@ https://lovable.dev/projects/b25e1305-3894-41be-9151-3394c589c508
 ## Installation & Getting Started
 1. Clone the repository
 ```bash
-git clone [<repository-url>](https://github.com/imakash13/The_code_explorers.git)
-cd library-management
+git clone https://github.com/imakash13/The_code_explorers.git
+cd library-lingo-main
 ```
 
 2. Install dependencies
