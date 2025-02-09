@@ -6,7 +6,6 @@ import { ThemeToggle } from "@/components/Theme-toggle";
 import { Link } from "react-router-dom";
 
 export const Header = () => {
-  const isAdmin = localStorage.getItem("isAdmin") === "true";
 
   return (
     <header className="border-b bg-background/50 backdrop-blur-sm sticky top-0 z-50">

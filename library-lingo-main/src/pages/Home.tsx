@@ -29,11 +29,18 @@ const Home = () => {
         </div>
         <div className="flex gap-4">
           <button 
-            className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             onClick={() => navigate("/login")} // Navigate to Login page
           >
+            <User className="h-5 w-5" />
+            User Login
+          </button>
+          <button 
+            className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-white rounded-lg hover:bg-gray-900 transition-colors"
+            onClick={() => navigate("/admin")}
+          >
             <Shield className="h-5 w-5" />
-            Login
+            Admin Login
           </button>
         </div>
       </div>
