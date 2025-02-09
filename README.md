@@ -29,8 +29,8 @@ https://library-explorers.netlify.app/
 ## Installation & Getting Started
 1. Clone the repository
 ```bash
-git clone https://github.com/imakash13/The_code_explorers.git
-cd library-lingo-main
+git clone https://github.com/ayeshashaw/Library-Management-system-in-react.git
+
 ```
 
 2. Install dependencies
