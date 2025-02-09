@@ -22,7 +22,6 @@ const Books = () => {
       try {
         const response = await axios.get(`${API_URL}/books.json`);
         const data = response.data;
-        console.log(data);
         const formattedBooks = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
@@ -43,7 +42,6 @@ const Books = () => {
   useEffect(() => {
     let result = [...books];
 
-    // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -54,18 +52,15 @@ const Books = () => {
       );
     }
 
-    // Apply genre filter
     if (selectedGenre !== "all") {
       result = result.filter((book) => book.genre === selectedGenre);
     }
 
-    // Apply rating filter
     if (selectedRating !== "all") {
       const minRating = parseInt(selectedRating);
       result = result.filter((book) => (book.rating || 0) >= minRating);
     }
 
-    // Apply availability filter
     if (selectedAvailability !== "all") {
       result = result.filter((book) =>
         selectedAvailability === "available" ? book.available : !book.available

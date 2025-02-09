@@ -8,6 +8,8 @@ import {
   User
 } from "firebase/auth";
 import { useToast } from "@/components/ui/use-toast";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 
 interface AuthContextType {
   user: User | null;
@@ -67,13 +69,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
   
     try {
-      const { user } = await createUserWithEmailAndPassword(auth, email, password);
+      const { user } = await createUserWithEmailAndPassword(auth, email, password)
+      // await setDoc(doc(db, "users", user.uid), {
+      //   name,
+      //   email,
+      //   phone,
+      //   createdAt: new Date().toISOString(),
+      // });
+  
       toast({
         title: "Account created successfully",
         description: "Welcome to the Library Management System!",
       });
     } catch (error: unknown) {
       const errorMessage = (error as Error).message;
+  
       if (errorMessage.includes("auth/email-already-in-use")) {
         toast({
           variant: "destructive",
