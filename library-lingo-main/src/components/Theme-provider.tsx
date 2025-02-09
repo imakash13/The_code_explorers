@@ -54,6 +54,7 @@ export function ThemeProvider({ children, defaultTheme = "system" }: ThemeProvid
 
 export const useTheme = () => {
   const context = useContext(ThemeProviderContext);
+  // console.log(context);
   if (!context) {
     throw new Error("useTheme must be used within a ThemeProvider");
   }
