@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { auth, db } from "@/lib/firebase";
+import { auth } from "@/lib/firebase";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
@@ -7,12 +7,10 @@ import {
   onAuthStateChanged,
   User
 } from "firebase/auth";
-import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useToast } from "@/components/ui/use-toast";
 
 interface AuthContextType {
   user: User | null;
-  userRole: string | null;
   loading: boolean;
   isOnline: boolean;
   signup: (name: string, email: string, phone: string, password: string) => Promise<void>;
@@ -32,7 +30,6 @@ export const useAuth = () => {
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [userRole, setUserRole] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const { toast } = useToast();
@@ -51,32 +48,13 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       setUser(user);
-      if (user) {
-        try {
-          const userDoc = await getDoc(doc(db, "users", user.uid));
-          if (userDoc.exists()) {
-            setUserRole(userDoc.data().role);
-          }
-        } catch (error: unknown) {
-          console.error("Error fetching user role:", error);
-          if ((error as Error).message.includes('offline')) {
-            toast({
-              variant: "destructive",
-              title: "Offline Mode",
-              description: "Some features may be limited while offline",
-            });
-          }
-        }
-      } else {
-        setUserRole(null);
-      }
       setLoading(false);
     });
 
     return unsubscribe;
-  }, [toast]);
+  }, []);
 
   const signup = async (name: string, email: string, phone: string, password: string) => {
     if (!isOnline) {
@@ -87,29 +65,32 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       });
       throw new Error("Cannot sign up while offline");
     }
-
+  
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
-      await setDoc(doc(db, "users", user.uid), {
-        name,
-        email,
-        phone,
-        createdAt: new Date().toISOString(),
-      });
       toast({
         title: "Account created successfully",
         description: "Welcome to the Library Management System!",
       });
     } catch (error: unknown) {
-      toast({
-        variant: "destructive",
-        title: "Error creating account",
-        description: (error as Error).message,
-      });
+      const errorMessage = (error as Error).message;
+      if (errorMessage.includes("auth/email-already-in-use")) {
+        toast({
+          variant: "destructive",
+          title: "Email already in use",
+          description: "The email address is already associated with an existing account. Please use a different email.",
+        });
+      } else {
+        toast({
+          variant: "destructive",
+          title: "Error creating account",
+          description: errorMessage,
+        });
+      }
       throw error;
     }
   };
-
+  
   const login = async (email: string, password: string) => {
     if (!isOnline) {
       toast({
@@ -164,7 +145,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const value = {
     user,
-    userRole,
     loading,
     isOnline,
     signup,
