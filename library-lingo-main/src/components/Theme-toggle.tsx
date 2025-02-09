@@ -10,7 +10,7 @@ import { useTheme } from "@/components/Theme-provider";
 
 export function ThemeToggle() {
   const { setTheme } = useTheme();
-  console.log(useTheme());
+  
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>

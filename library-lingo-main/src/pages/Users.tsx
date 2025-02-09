@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { Menu, Search, User } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { books } from "@/lib/mock-data";
 import { BookGrid } from "@/components/BookGrid";
 import { SearchBar } from "@/components/SearchBar";
 import { Link } from "react-router-dom";
@@ -32,7 +31,7 @@ const Users = () => {
       
   
       fetchData();
-    }, []); // Only runs on mount
+    }, []);
   
     const search = searchQuery?.toLowerCase() || "";
     const filteredBooks = books.filter(
@@ -58,7 +57,7 @@ const Users = () => {
                             <SheetContent side="left">
                                 <nav className="flex flex-col gap-4">
                                     <Link to="/books" className="text-lg font-medium">Books</Link>
-                                    <Link to="/users" className="text-lg font-medium">Profile</Link>
+                                    <Link to="/profile" className="text-lg font-medium">Profile</Link>
                                 </nav>
                             </SheetContent>
                         </Sheet>
@@ -68,15 +67,6 @@ const Users = () => {
                             <Link to="/profile" className="text-sm font-medium hover:text-primary/80 transition-colors">Profile</Link>
                         </nav>
                     </div>
-
-                    {/* <div className="flex items-center gap-4">
-                        <Button variant="ghost" size="icon">
-                            <Search className="w-5 h-5" />
-                        </Button>
-                        <Button variant="ghost" size="icon">
-                            <User className="w-5 h-5" />
-                        </Button>
-                    </div> */}
                 </div>
             </header>
 
