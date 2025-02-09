@@ -20,7 +20,7 @@ type LoginFormValues = z.infer<typeof loginSchema>;
 
 const Login = () => {
     const [loading, setLoading] = useState(false);
-    const { login, userRole } = useAuth();
+    const { login } = useAuth();
     const navigate = useNavigate();
     const { toast } = useToast();
 
@@ -38,22 +38,13 @@ const Login = () => {
         try {
             setLoading(true);
             await login(values.email, values.password);
-
-            // Wait for a brief moment to ensure userRole is updated
-            setTimeout(() => {
-                toast({
-                    title: "Success",
-                    description: "Successfully logged in!",
-                });
-
-                // Redirect based on user role
-                if (userRole === "admin") {
-                    navigate("/admin");
-                } else {
-                    navigate("/dashboard");
-                }
-            }, 500);
-
+            
+            toast({
+                title: "Success",
+                description: "Successfully logged in!",
+            });
+            
+            navigate("/dashboard");
         } catch (error: any) {
             console.error("Login error:", error);
             let errorMessage = "Failed to login. Please try again.";

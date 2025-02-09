@@ -15,7 +15,7 @@ interface AuthContextType {
   userRole: string | null;
   loading: boolean;
   isOnline: boolean;
-  signup: (email: string, password: string, role: string) => Promise<void>;
+  signup: (name: string, email: string, phone: string, password: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -37,7 +37,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isOnline, setIsOnline] = useState(navigator.onLine);
   const { toast } = useToast();
 
-  // Monitor online status
   useEffect(() => {
     const handleOnline = () => setIsOnline(true);
     const handleOffline = () => setIsOnline(false);
@@ -79,7 +78,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     return unsubscribe;
   }, [toast]);
 
-  const signup = async (email: string, password: string, role: string) => {
+  const signup = async (name: string, email: string, phone: string, password: string) => {
     if (!isOnline) {
       toast({
         variant: "destructive",
@@ -92,8 +91,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       const { user } = await createUserWithEmailAndPassword(auth, email, password);
       await setDoc(doc(db, "users", user.uid), {
+        name,
         email,
-        role,
+        phone,
         createdAt: new Date().toISOString(),
       });
       toast({
