@@ -134,7 +134,7 @@ const Books = () => {
           <Card key={book.id} className="overflow-hidden">
             <div className="aspect-[4/3] relative">
               <img 
-                src={book.coverImage} 
+                src={book.coverUrl} 
                 alt={book.title}
                 className="object-cover w-full h-full"
               />

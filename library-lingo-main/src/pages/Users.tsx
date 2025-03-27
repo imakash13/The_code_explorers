@@ -12,7 +12,7 @@ const Users = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [books, setBooks] = useState<Book[]>([]);
 
-    const API_URL = "https://library-55df1-default-rtdb.firebaseio.com";
+    const API_URL = "https://booksapi-6472a-default-rtdb.asia-southeast1.firebasedatabase.app/";
     useEffect(() => {
       const fetchData = async () => {
         try {
