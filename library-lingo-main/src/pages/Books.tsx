@@ -3,10 +3,13 @@ import axios from "axios";
 import { Book } from "@/types/book";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Star } from "lucide-react";
+import { Star, PlusCircle } from "lucide-react";
 import { FilterBar } from "@/components/FilterBar";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/components/ui/use-toast";
 
 const Books = () => {
+  const { toast } = useToast();
   const [books, setBooks] = useState<Book[]>([]);
   const [filteredBooks, setFilteredBooks] = useState<Book[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -15,14 +18,13 @@ const Books = () => {
   const [selectedRating, setSelectedRating] = useState("all");
   const [selectedAvailability, setSelectedAvailability] = useState("all");
 
-  const API_URL = "https://booksapi-6472a-default-rtdb.asia-southeast1.firebasedatabase.app/";
+  const API_URL = "https://library-management-6e410-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
   useEffect(() => {
     const fetchBooks = async () => {
       try {
         const response = await axios.get(`${API_URL}/books.json`);
         const data = response.data;
-        console.log(data);
         const formattedBooks = Object.keys(data).map((key) => ({
           id: key,
           ...data[key],
@@ -43,7 +45,6 @@ const Books = () => {
   useEffect(() => {
     let result = [...books];
 
-    // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -54,18 +55,15 @@ const Books = () => {
       );
     }
 
-    // Apply genre filter
     if (selectedGenre !== "all") {
       result = result.filter((book) => book.genre === selectedGenre);
     }
 
-    // Apply rating filter
     if (selectedRating !== "all") {
       const minRating = parseInt(selectedRating);
       result = result.filter((book) => (book.rating || 0) >= minRating);
     }
 
-    // Apply availability filter
     if (selectedAvailability !== "all") {
       result = result.filter((book) =>
         selectedAvailability === "available" ? book.available : !book.available
@@ -76,6 +74,29 @@ const Books = () => {
   }, [books, searchQuery, selectedGenre, selectedRating, selectedAvailability]);
 
   const genres = [...new Set(books.map((book) => book.genre))];
+
+  const addToProfile = (book: Book) => {
+    const issuedBooks = JSON.parse(localStorage.getItem('issuedBooks') || '[]');
+    
+    // Check if book is already issued
+    if (issuedBooks.some((b: Book) => b.id === book.id)) {
+      toast({
+        title: "Already Added",
+        description: "This book is already in your profile.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    // Add book to issued books
+    const updatedIssuedBooks = [...issuedBooks, book];
+    localStorage.setItem('issuedBooks', JSON.stringify(updatedIssuedBooks));
+
+    toast({
+      title: "Book Added",
+      description: "The book has been added to your profile successfully.",
+    });
+  };
 
   if (isLoading) {
     return (
@@ -139,6 +160,16 @@ const Books = () => {
                   {book.available ? 'Available' : 'Checked Out'}
                 </span>
               </div>
+              {book.available && (
+                <Button 
+                  className="w-full mt-2" 
+                  variant="outline"
+                  onClick={() => addToProfile(book)}
+                >
+                  <PlusCircle className="w-4 h-4 mr-2" />
+                  Add to Profile
+                </Button>
+              )}
             </CardContent>
           </Card>
         ))}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Book, Users, Clock, BookOpen, Search, CircleUser, Shield, User, Route } from 'lucide-react';
+import { Book, Users, Clock, BookOpen, Search, CircleUser, Shield, User } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
@@ -30,7 +30,7 @@ const Home = () => {
         <div className="flex gap-4">
           <button 
             className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-            onClick={() => navigate("/users")}
+            onClick={() => navigate("/login")}
           >
             <User className="h-5 w-5" />
             User Login
@@ -53,7 +53,7 @@ const Home = () => {
               <User className="h-6 w-6 text-blue-600" />
             </div>
             <div className="ml-4">
-              <h3 className="text-lg font-semibold">User Access</h3>
+              <h3 className="text-lg font-semibold" onClick={() => navigate("/login")}>User Access</h3>
               <p className="text-gray-500">Browse books, manage your loans, and view your reading history</p>
             </div>
           </CardContent>
@@ -65,7 +65,7 @@ const Home = () => {
               <Shield className="h-6 w-6 text-gray-800" />
             </div>
             <div className="ml-4">
-              <h3 className="text-lg font-semibold">Admin Portal</h3>
+              <h3 className="text-lg font-semibold" onClick={() => navigate("/admin")}>Admin Portal</h3>
               <p className="text-gray-500">Manage inventory, users, and monitor library operations</p>
             </div>
           </CardContent>
