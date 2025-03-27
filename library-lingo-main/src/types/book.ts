@@ -10,6 +10,7 @@ export interface Book {
   genre?: string;
   isbn?: string;
   coverImage?: string;
+  coverUrl?: string;
   description?: string;
 }
 

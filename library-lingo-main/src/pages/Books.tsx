@@ -15,7 +15,7 @@ const Books = () => {
   const [selectedRating, setSelectedRating] = useState("all");
   const [selectedAvailability, setSelectedAvailability] = useState("all");
 
-  const API_URL = "https://library-55df1-default-rtdb.firebaseio.com";
+  const API_URL = "https://booksapi-6472a-default-rtdb.asia-southeast1.firebasedatabase.app/";
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -113,7 +113,7 @@ const Books = () => {
           <Card key={book.id} className="overflow-hidden">
             <div className="aspect-[4/3] relative">
               <img 
-                src={book.coverImage} 
+                src={book.coverUrl} 
                 alt={book.title}
                 className="object-cover w-full h-full"
               />
